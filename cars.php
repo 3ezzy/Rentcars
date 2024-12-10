@@ -22,9 +22,9 @@
         include "sidebar.php"
         ?>
         <main class="sm:ml-64 p-4">
-            <h1 class="flex items-center text-3xl font-extrabold text-blue-600 mb-2">
-                <i class="fa-solid fa-car"></i>
-                List of Cars
+            <h1 class="flex items-center gap-2 text-3xl font-extrabold text-blue-600 mb-2">
+                <i class="fa-solid fa-car text-3xl"></i>
+                <span>List of Cars</span>
             </h1>
 
 

@@ -22,12 +22,12 @@
         include "sidebar.php"
         ?>
         <main class="sm:ml-64 p-4">
-            <h1 class="flex items-center text-3xl font-extrabold text-blue-600 mb-2">
-             <i class="fa-solid fa-file-contract"></i>
-                List of Contrats
+            <h1 class="flex items-center gap-2 text-3xl font-extrabold text-blue-600 mb-2">
+                <i class="fa-solid fa-file-contract text-3xl"></i>
+                <span>List of Contracts</span>
             </h1>
 
-
+            
             <?php
             require_once 'config.php';
             $sql = "SELECT * FROM Contrats";
@@ -74,7 +74,7 @@
                                             Modifier
                                         </a>
                                         <button type="button" onclick=""
-                                            
+
                                             class="flex items-center px-2 py-1 text-xs font-medium text-center text-red-700 border border-red-700 rounded-lg hover:text-white hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewbox="0 0 20 20"
                                                 fill="currentColor" aria-hidden="true">
@@ -102,7 +102,7 @@
                 </tbody>
             </table>
     </div>
-            </main>
+    </main>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
