@@ -5,12 +5,12 @@ if (isset($_POST['add_user'])) {
     $numerotel = $_POST['numerotel'];
 
 
-    if (!is_numeric($numerotel)) {
-        echo "";
-        exit;
-    }
+    // if (!is_numeric($numerotel)) {
+    //     echo "";
+    //     exit;
+    // }
     try {
-        if (!empty($nom) && !empty($adresse) && !empty($numerotel)&& !is_numeric($numerotel) ) {
+        if (!empty($nom) && !empty($adresse) && !empty($numerotel) ) {
             require_once "config.php";
 
             // Prepare the SQL statement with placeholders

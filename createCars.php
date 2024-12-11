@@ -1,3 +1,43 @@
+<?php
+if (isset($_POST['add_car'])) {
+    $num_immatriculation = $_POST['num_immatriculation'];
+    $marque = $_POST['marque'];
+    $modele = $_POST['modele'];
+    $annee = $_POST['annee'];
+
+
+
+    // if (!is_numeric($numerotel)) {
+    //     echo "";
+    //     exit;
+    // }
+    try {
+        if (!empty($num_immatriculation) && !empty($marque) && !empty($modele) && !empty($annee)) {
+            require_once "config.php";
+
+            // Prepare the SQL statement with placeholders
+            $stmt = $connection->prepare("INSERT INTO voitures VALUES (?, ?, ?, ?)");
+
+            // Bind parameters with types (s = string)
+            $stmt->bind_param("ssss", $num_immatriculation, $marque, $modele, $annee);
+
+            // Execute the statement
+            if ($stmt->execute()) {
+                echo "New record inserted successfully!";
+                header('Location: cars.php');
+                exit;
+            } else {
+                echo "Error: " . $stmt->error;
+            }
+        } else {
+            echo "Please fill in all fields.";
+        }
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
