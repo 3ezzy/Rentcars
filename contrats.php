@@ -27,10 +27,10 @@
                 <span>List of Contracts</span>
             </h1>
 
-            
+
             <?php
             require_once 'config.php';
-            $sql = "SELECT * FROM Contrats";
+            $sql = "select clients.Nom , contrats.Num_Contrat, contrats.date_debut ,contrats.date_fin from clients , contrats where clients.NumClient = contrats.NumClient ";
             $result = $connection->query($sql);
             ?>
 
@@ -40,7 +40,7 @@
                         <th class="px-4 py-2 text-xs text-left">#</th>
                         <th class="px-4 py-2 text-xs text-left">date_debut</th>
                         <th class="px-4 py-2 text-xs text-left">date_fin</th>
-                        <th class="px-4 py-2 text-xs text-left">NumClient</th>
+                        <th class="px-4 py-2 text-xs text-left">Nom client</th>
 
                         <th class="px-4 py-2 text-xs text-left">Action</th>
                     </tr>
@@ -55,7 +55,7 @@
                                 <td class="px-4 py-2 text-xs"><?= $row['Num_Contrat'] ?></td>
                                 <td class="px-4 py-2 text-xs"><?= $row['date_debut'] ?></td>
                                 <td class="px-4 py-2 text-xs"><?= $row['date_fin'] ?></td>
-                                <td class="px-4 py-2 text-xs"><?= $row['NumClient'] ?></td>
+                                <td class="px-4 py-2 text-xs"><?= $row['Nom'] ?></td>
 
                                 <td class="px-2 py-2 text-xs font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     <div class="flex items-center space-x-2">
