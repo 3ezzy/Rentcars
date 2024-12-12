@@ -1,31 +1,26 @@
 <?php
-if (isset($_POST['add_user'])) {
+if (isset($_POST['edit_user'])) {
     $nom = $_POST['nom'];
     $adresse = $_POST['adresse'];
     $numerotel = $_POST['numerotel'];
-
-
-    // if (!is_numeric($numerotel)) {
-    //     echo "";
-    //     exit;
-    // }
+    $numClient = $_POST['NumClient'];
     try {
-        if (!empty($nom) && !empty($adresse) && !empty($numerotel) ) {
+        if (!empty($nom) && !empty($adresse) && !empty($numerotel) && !empty($numClient)) {
             require_once "config.php";
 
             // Prepare the SQL statement with placeholders
-            $stmt = $connection->prepare("INSERT INTO clients VALUES (NULL, ?, ?, ?)");
+            $stmt = $connection->prepare("UPDATE  clients set Nom=?, adresse=?,numerotel=? WHERE NumClient = ?");
 
             // Bind parameters with types (s = string)
-            $stmt->bind_param("ssi", $nom, $adresse, $numerotel);
+            $stmt->bind_param("ssii", $nom, $adresse, $numerotel, $numClient);
 
             // Execute the statement
             if ($stmt->execute()) {
-                echo "New record inserted successfully!";
+                echo "Record updated successfully!";
                 header('Location: client.php');
                 exit;
             } else {
-                echo "Error: " . $stmt->error;
+                echo "Error updating record:  " . $stmt->error;
             }
         } else {
             echo "Please fill in all fields.";
@@ -61,7 +56,7 @@ if (isset($_POST['add_user'])) {
         ?>
         <!-- <h1>hello</h1> -->
 
-        <!-- Ajouter un Client -->
+        <!-- Edit un Client -->
         <div class="w-full max-w-2xl mx-auto bg-white rounded-lg shadow-md dark:bg-gray-800">
             <!-- Gradient Header with Rounded Top -->
             <div class="px-6 py-4 rounded-t-lg bg-gradient-to-r from-blue-600 to-blue-800">
@@ -69,32 +64,33 @@ if (isset($_POST['add_user'])) {
             </div>
             <div class="p-6">
                 <form method="POST" class="space-y-4">
+                    <input type="hidden" name="NumClient" value="<?= $_GET["NumClient"]; ?>">
                     <!-- Nom -->
                     <div>
                         <label for="nom" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nom du Client</label>
-                        <input type="text" name="nom" id="nom" value=""
+                        <input type="text" name="nom" id="nom" value="<?= isset($client['nom']) ? $client['nom'] : ''; ?>"
                             class="block w-full p-2 mt-1 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
                     </div>
 
                     <!-- Adresse -->
                     <div>
                         <label for="adresse" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Adresse</label>
-                        <input type="text" name="adresse" id="adresse" value=""
+                        <input type="text" name="adresse" id="adresse" value="<?= isset($client['adresse']) ? $client['adresse'] : ''; ?>"
                             class="block w-full p-2 mt-1 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
                     </div>
 
                     <!-- Numéro de Téléphone -->
                     <div>
                         <label for="numerotel" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Numéro de Téléphone</label>
-                        <input type="tel" name="numerotel" id="numerotel" value=""
+                        <input type="tel" name="numerotel" id="numerotel" value="<?= isset($client['numerotel']) ? $client['numerotel'] : ''; ?>"
                             class="block w-full p-2 mt-1 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
                     </div>
 
                     <!-- Submit Button -->
                     <div class="flex justify-end">
-                        <input name="add_user" type="submit" value="Update"
+                        <input name="edit_user" type="submit" value="Update"
                             class="px-6 py-2 text-white bg-blue-700 rounded-lg hover:bg-blue-500 focus:ring-4 focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600">
-                            
+
                         </input>
                     </div>
                 </form>
