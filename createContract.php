@@ -1,3 +1,51 @@
+<?php
+if (isset($_POST['add_contract'])) {
+    $date_debut = $_POST['date_debut'];
+    $date_fin = $_POST['date_fin'];
+    
+    $num_client = $_POST['num_client'];
+    $num_immatriculation = $_POST['num_immatriculation'];
+    // Convertir les dates en objets DateTime
+    $debut = new DateTime($date_debut);
+    $fin = new DateTime($date_fin);
+
+    // Calculer la différence entre les deux dates
+    $difference = $debut->diff($fin);
+
+    // Récupérer la différence en jours
+    $duree = $difference->days; 
+
+
+    try {
+        if (!empty($num_client) && !empty($date_debut) && !empty($date_fin) && !empty($duree) && !empty($num_immatriculation)) {
+            require_once "config.php";
+
+            // Prepare the SQL statement with placeholders
+            $stmt = $connection->prepare("INSERT INTO contrats VALUES (null, ?, ?, ?,?,?)");
+
+            // Bind parameters with types (s = string)
+            $stmt->bind_param("ssiis", $date_debut, $date_fin, $duree, $num_client, $num_immatriculation);
+
+            // Execute the statement
+            if ($stmt->execute()) {
+                echo "New record inserted successfully!";
+                header('Location: contrats.php');
+                exit;
+            } else {
+                echo "Error: " . $stmt->error;
+            }
+        } else {
+            echo "Please fill in all fields.";
+        }
+    } catch (Exception $e) {
+        echo "Error: " . $e->getMessage();
+    }
+}
+?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,63 +69,71 @@
         include "sidebar.php"
         ?>
 
-<div class="w-full max-w-2xl mx-auto bg-white rounded-lg shadow-md dark:bg-gray-800">
-        <div class="px-6 py-4 rounded-t-lg bg-gradient-to-r from-blue-600 to-blue-800">
-            <h3 class="text-xl font-semibold text-white">Ajouter un Contrat</h3>
-        </div>
-        <div class="p-6">
-            <form method="POST" class="space-y-4">
-                <!-- Numéro de Contrat -->
-                <div>
-                    <label for="num_contrat" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Numéro de Contrat</label>
-                    <input type="number" name="num_contrat" id="num_contrat" value=""
-                        class="block w-full p-2 mt-1 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
-                </div>
+        <div class="w-full max-w-2xl mx-auto bg-white rounded-lg shadow-md dark:bg-gray-800">
+            <div class="px-6 py-4 rounded-t-lg bg-gradient-to-r from-blue-600 to-blue-800">
+                <h3 class="text-xl font-semibold text-white">Ajouter un Contrat</h3>
+            </div>
+            <div class="p-6">
+                <form method="POST" class="space-y-4">
+                    <?php
+                    require_once 'config.php';
+                    $sql = "SELECT * FROM Clients";
+                    $clients = $connection->query($sql);
+                    ?>
+                    <!-- Numéro de Client -->
+                    <div>
+                        <label for="num_client" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Numéro de Client</label>
+                        <select name="num_client" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option value="">choisissez une Client</option>
+                            <?php
+                            foreach ($clients as $client) {
+                                echo "<option value='" . $client['NumClient'] . "'>" . $client['Nom'] . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <?php
+                    require_once 'config.php';
+                    $sql = "SELECT * FROM voitures";
+                    $voitures = $connection->query($sql);
+                    ?>
+                    <!-- Numéro d'Immatriculation -->
+                    <div>
+                        <label for="num_immatriculation" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">modele</label>
+                        <select name="num_immatriculation" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option value="">choisissez une modele</option>
+                            <?php
+                            foreach ($voitures as $voiture) {
+                                echo "<option value='" . $voiture['Num_immatriculation'] . "'>" . $voiture['modele'] . "</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
 
-                <!-- Date de Début -->
-                <div>
-                    <label for="date_debut" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Date de Début</label>
-                    <input type="date" name="date_debut" id="date_debut" value=""
-                        class="block w-full p-2 mt-1 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
-                </div>
+                    <!-- Date de Début -->
+                    <div>
+                        <label for="date_debut" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Date de Début</label>
+                        <input type="date" name="date_debut" id="date_debut" value=""
+                            class="block w-full p-2 mt-1 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
+                    </div>
 
-                <!-- Date de Fin -->
-                <div>
-                    <label for="date_fin" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Date de Fin</label>
-                    <input type="date" name="date_fin" id="date_fin" value=""
-                        class="block w-full p-2 mt-1 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
-                </div>
+                    <!-- Date de Fin -->
+                    <div>
+                        <label for="date_fin" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Date de Fin</label>
+                        <input type="date" name="date_fin" id="date_fin" value=""
+                            class="block w-full p-2 mt-1 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
+                    </div>
 
-                <!-- Durée -->
-                <div>
-                    <label for="duree" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Durée (en jours)</label>
-                    <input type="number" name="duree" id="duree" value=""
-                        class="block w-full p-2 mt-1 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
-                </div>
 
-                <!-- Numéro de Client -->
-                <div>
-                    <label for="num_client" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Numéro de Client</label>
-                    <input type="number" name="num_client" id="num_client" value=""
-                        class="block w-full p-2 mt-1 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
-                </div>
-
-                <!-- Numéro d'Immatriculation -->
-                <div>
-                    <label for="num_immatriculation" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Numéro d'Immatriculation</label>
-                    <input type="text" name="num_immatriculation" id="num_immatriculation" value=""
-                        class="block w-full p-2 mt-1 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
-                </div>
-
-                <!-- Submit Button -->
-                <div class="flex justify-end">
-                    <input name="add_contract" type="submit"
-                        class="px-6 py-2 text-white bg-blue-700 rounded-lg hover:bg-blue-500 focus:ring-4 focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600">
-                </div>
-            </form>
+                    <!-- Submit Button -->
+                    <div class="flex justify-end">
+                        <input name="add_contract" type="submit"
+                            class="px-6 py-2 text-white bg-blue-700 rounded-lg hover:bg-blue-500 focus:ring-4 focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600">
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-</div>
     </div>
 
 
