@@ -30,7 +30,7 @@
 
             <?php
             require_once 'config.php';
-            $sql = "select * from clients , voitures , contrats where clients.NumClient = contrats.NumClient and voitures.Num_immatriculation = contrats.NumImmatriculation ;
+            $sql = "select * from clients , voitures , contrats where clients.NumClient = contrats.NumClient and voitures.id = contrats.id ;
 ";
             $result = $connection->query($sql);
             ?>
@@ -79,7 +79,7 @@
                                             </svg>
                                             Modifier
                                         </a>
-                                        <button type="button" onclick=""
+                                        <a href="deleteContrat.php?Num_Contrat=<?= $row['Num_Contrat'] ?>" type="button" onclick=" return confirm('Are you sure you want to delete the <?= $row['Nom'] ?> ?')"
 
                                             class="flex items-center px-2 py-1 text-xs font-medium text-center text-red-700 border border-red-700 rounded-lg hover:text-white hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewbox="0 0 20 20"
@@ -89,8 +89,7 @@
                                                     clip-rule="evenodd" />
                                             </svg>
                                             Supprimer
-                                        </button>
-
+                                        </a>
                                     </div>
                                 </td>
                             <?php

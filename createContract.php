@@ -4,7 +4,7 @@ if (isset($_POST['add_contract'])) {
     $date_fin = $_POST['date_fin'];
     
     $num_client = $_POST['num_client'];
-    $num_immatriculation = $_POST['num_immatriculation'];
+    $id_car = $_POST['id_car'];
     // Convertir les dates en objets DateTime
     $debut = new DateTime($date_debut);
     $fin = new DateTime($date_fin);
@@ -17,14 +17,14 @@ if (isset($_POST['add_contract'])) {
 
 
     try {
-        if (!empty($num_client) && !empty($date_debut) && !empty($date_fin) && !empty($duree) && !empty($num_immatriculation)) {
+        if (!empty($num_client) && !empty($date_debut) && !empty($date_fin) && !empty($duree) && !empty($id_car)) {
             require_once "config.php";
 
             // Prepare the SQL statement with placeholders
             $stmt = $connection->prepare("INSERT INTO contrats VALUES (null, ?, ?, ?,?,?)");
 
             // Bind parameters with types (s = string)
-            $stmt->bind_param("ssiis", $date_debut, $date_fin, $duree, $num_client, $num_immatriculation);
+            $stmt->bind_param("ssiis", $date_debut, $date_fin, $duree, $num_client, $id_car);
 
             // Execute the statement
             if ($stmt->execute()) {
@@ -99,12 +99,12 @@ if (isset($_POST['add_contract'])) {
                     ?>
                     <!-- Numéro d'Immatriculation -->
                     <div>
-                        <label for="num_immatriculation" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">modele</label>
-                        <select name="num_immatriculation" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        <label for="id_car" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">modele</label>
+                        <select name="id_car" id="" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                             <option value="">choisissez une modele</option>
                             <?php
                             foreach ($voitures as $voiture) {
-                                echo "<option value='" . $voiture['Num_immatriculation'] . "'>" . $voiture['modele'] . "</option>";
+                                echo "<option value='" . $voiture['id'] . "'>" . $voiture['marque'] ." ". $voiture['modele'] . "</option>";
                             }
                             ?>
                         </select>

@@ -37,6 +37,7 @@
             <table class="min-w-full bg-white border border-gray-300 rounded-lg shadow-md table-auto">
                 <thead class="text-white bg-blue-600">
                     <tr>
+                        <th class="px-4 py-2 text-xs text-left">#</th>
                         <th class="px-4 py-2 text-xs text-left">Num_immatriculation</th>
                         <th class="px-4 py-2 text-xs text-left">Marque</th>
                         <th class="px-4 py-2 text-xs text-left">Modele</th>
@@ -52,6 +53,7 @@
                         foreach ($rows as $row) {
                     ?>
                             <tr class="border-b hover:bg-gray-100">
+                                <td class="px-4 py-2 text-xs"><?= $row['id'] ?></td>
                                 <td class="px-4 py-2 text-xs"><?= $row['Num_immatriculation'] ?></td>
                                 <td class="px-4 py-2 text-xs"><?= $row['marque'] ?></td>
                                 <td class="px-4 py-2 text-xs"><?= $row['modele'] ?></td>
@@ -59,7 +61,7 @@
 
                                 <td class="px-2 py-2 text-xs font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     <div class="flex items-center space-x-2">
-                                        <a href=""
+                                        <a href="editCars.php?id=<?= $row['id']?>"
                                             data-drawer-target="drawer-update-product" data-drawer-show="drawer-update-product"
                                             aria-controls="drawer-update-product"
                                             class="flex items-center px-2 py-1 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
@@ -73,7 +75,7 @@
                                             </svg>
                                             Modifier
                                         </a>
-                                        <button type="button" onclick=""
+                                        <a href="deleteVoiture.php?id=<?= $row['id'] ?>" type="button" onclick=" return confirm('Are you sure you want to delete the <?= $row['marque'] ?> <?= $row['marque'] ?> ?')"
 
                                             class="flex items-center px-2 py-1 text-xs font-medium text-center text-red-700 border border-red-700 rounded-lg hover:text-white hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900">
                                             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-1" viewbox="0 0 20 20"
@@ -83,7 +85,7 @@
                                                     clip-rule="evenodd" />
                                             </svg>
                                             Supprimer
-                                        </button>
+                                        </a>
 
                                     </div>
                                 </td>

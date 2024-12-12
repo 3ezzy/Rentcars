@@ -11,7 +11,7 @@ if (isset($_POST['add_car'])) {
             require_once "config.php";
 
             // Prepare the SQL statement with placeholders
-            $stmt = $connection->prepare("INSERT INTO voitures VALUES (?, ?, ?, ?)");
+            $stmt = $connection->prepare("INSERT INTO voitures VALUES (null,?, ?, ?, ?)");
 
             // Bind parameters with types (s = string)
             $stmt->bind_param("ssss", $num_immatriculation, $marque, $modele, $annee);
