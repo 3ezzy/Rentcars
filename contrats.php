@@ -53,7 +53,7 @@
                     if ($result->num_rows > 0) {
                         $rows = $result->fetch_all(MYSQLI_ASSOC);
                         foreach ($rows as $row) {
-                            
+
                     ?>
                             <tr class="border-b hover:bg-gray-100">
                                 <td class="px-4 py-2 text-xs"><?= $row['Num_Contrat'] ?></td>
@@ -65,7 +65,7 @@
 
                                 <td class="px-2 py-2 text-xs font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     <div class="flex items-center space-x-2">
-                                        <a href=""
+                                        <a href="editContrat.php?Num_Contrat=<?= $row['Num_Contrat'] ?>"
                                             data-drawer-target="drawer-update-product" data-drawer-show="drawer-update-product"
                                             aria-controls="drawer-update-product"
                                             class="flex items-center px-2 py-1 text-xs font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300">
