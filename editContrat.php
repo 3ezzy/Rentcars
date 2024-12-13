@@ -1,11 +1,20 @@
 <?php
 if (isset($_POST['edit_contrat'])) {
     //var_dump($_POST);
-    // $id_car = $_POST['id_car'];
     $Num_Contrat = $_POST['Num_Contrat'];
+    $id_voiture = $_POST['id_voiture'];
+    $NumClient = $_POST['NumClient'];
     $date_debut = $_POST['date_debut'];
     $date_fin = $_POST['date_fin'];
-    // $duree = $_POST['duree'];
+     // Convertir les dates en objets DateTime
+     $debut = new DateTime($date_debut);
+     $fin = new DateTime($date_fin);
+ 
+     // Calculer la différence entre les deux dates
+     $difference = $debut->diff($fin);
+ 
+     // Récupérer la différence en jours
+     $duree = $difference->days; 
 
 
 
@@ -14,14 +23,14 @@ if (isset($_POST['edit_contrat'])) {
             require_once "config.php";
 
             // Prepare the SQL statement with placeholders
-            $stmt = $connection->prepare("UPDATE Contrats SET NumClient = ?, date_debut = ?, date_fin = ? WHERE id = ?");
+            $stmt = $connection->prepare("UPDATE contrats SET date_debut=?,date_fin=?,duree=?,NumClient=?,id_voiture=? WHERE Num_Contrat=?");
 
 
 
 
 
             // Bind parameters with types (s = string)
-            $stmt->bind_param("sssi", $Num_Contrat, $date_debut, $date_fin, $_GET["Num_Contrat"]);
+            $stmt->bind_param("ssiisi", $date_debut, $date_fin, $duree, $NumClient, $id_voiture, $Num_Contrat);
 
             // Execute the statement
             if ($stmt->execute()) {
@@ -85,15 +94,65 @@ if (isset($_POST['edit_contrat'])) {
 
             <div class="p-6">
                 <form method="POST" class="space-y-4">
+
+
+
+
                     <div>
                         <label for="nom" class="block text-sm font-medium text-gray-700 dark:text-gray-300">modele</label>
-                        <input type="text" name="NumClient" id="Num_Contrat" value="<?= $car['id'] ?>"
-                            class="block w-full p-2 mt-1 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
+                        <?php
+                        require_once 'config.php';
+                        $sql = "select * from  voitures ";
+                        $result = $connection->query($sql);
+                        ?>
+                        <select name="id_voiture" id="" class="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Choisissez une catégorie</option>
+                            <?php
+                            if ($result->num_rows > 0) {
+                                $rows = $result->fetch_all(MYSQLI_ASSOC);
+                                foreach ($rows as $row) {
+                                    if ($car['id_voiture'] == $row['id']) {
+                            ?>
+                                        <option selected value="<?= $row['id'] ?>"><?= $row['marque'] . " " . $row['modele'] ?></option>
+                                    <?php
+                                    } else {
+                                    ?>
+                                        <option value="<?= $row['id'] ?>"><?= $row['marque'] . " " . $row['modele'] ?></option>
+                            <?php
+                                    }
+                                }
+                            }
+                            ?>
+
+                        </select>
                     </div>
                     <div>
                         <label for="nom" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nom du Client</label>
-                        <input type="text" name="NumClient" id="Num_Contrat" value="<?= $car['NumClient'] ?>"
-                            class="block w-full p-2 mt-1 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
+                        <?php
+                        require_once 'config.php';
+                        $sql = "select * from clients";
+                        $result2 = $connection->query($sql);
+                        ?>
+                        <select name="NumClient" id="" class="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Choisissez une catégorie</option>
+                            <?php
+                            if ($result->num_rows > 0) {
+                                $clients = $result2->fetch_all(MYSQLI_ASSOC);
+                                foreach ($clients as $client) {
+                                    if ($car['NumClient'] == $client['NumClient']) {
+                            ?>
+                                        <option selected value="<?= $client['NumClient'] ?>"><?= $client['Nom'] ?></option>
+                                    <?php
+                                    } else {
+                                    ?>
+                                        <option value="<?= $client['NumClient'] ?>"><?= $client['Nom'] ?></option>
+                            <?php
+                                    }
+                                }
+                            }
+                            ?>
+
+                        </select>
                     </div>
 
                     <!-- Date de Début -->
@@ -109,7 +168,7 @@ if (isset($_POST['edit_contrat'])) {
                         <input type="date" name="date_fin" id="date_fin" value="<?= $car['date_fin'] ?>"
                             class="block w-full p-2 mt-1 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white" required>
                     </div>
-
+                    <input type="hidden" name="Num_Contrat" value="<?= $car['Num_Contrat'] ?>">
 
                     <!-- Submit Button -->
                     <div class="flex justify-end">

@@ -30,7 +30,7 @@
 
             <?php
             require_once 'config.php';
-            $sql = "select * from clients , voitures , contrats where clients.NumClient = contrats.NumClient and voitures.id = contrats.id ;
+            $sql = "select * from clients , voitures , contrats where clients.NumClient = contrats.NumClient and voitures.id = contrats.id_voiture ;
 ";
             $result = $connection->query($sql);
             ?>
